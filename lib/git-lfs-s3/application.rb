@@ -30,6 +30,8 @@ module GitLfsS3
     end
 
     def authorized?
+      return true unless Application.authentication_enabled?
+
       @auth ||=  Rack::Auth::Basic::Request.new(request.env)
       @auth.provided? && @auth.basic? && @auth.credentials && self.class.auth_callback.call(
         @auth.credentials[0], @auth.credentials[1]
